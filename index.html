@@ -314,7 +314,14 @@
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
                 try {
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    
+                    // NEW: Better error handling
+                    if (!response.ok) {
+                        const errorBody = await response.json();
+                        const errorMessage = errorBody?.error?.message || `HTTP error! status: ${response.status}`;
+                        throw new Error(errorMessage);
+                    }
+
                     const result = await response.json();
                     if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
                         return result.candidates[0].content.parts[0].text;
@@ -327,7 +334,8 @@
                         await new Promise(res => setTimeout(res, delay));
                         return callGemini(userRequest, retries - 1, delay * 2);
                     } else {
-                        return "Error: Unable to generate prompt. Please try again later.";
+                        // Return the specific error message to the user
+                        return `Error: ${error.message}\n\nUnable to generate prompt. This may be due to API limits or a network issue. Please try again later.`;
                     }
                 }
             }
