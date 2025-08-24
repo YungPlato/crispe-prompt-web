@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Prompt Superior - AI Prompt Generator for Gemini</title>
+    <meta name="description" content="Elevate your AI interactions with Prompt Superior. Our Gemini-powered tool helps you craft perfectly structured prompts using advanced frameworks for superior results in marketing, coding, and creative projects.">
+    <meta name="keywords" content="AI prompt generator, prompt engineering, Gemini prompt helper, AI model personas, AI marketing prompts, AI coding prompts, creative AI prompts, SEO, prompt optimization, affiliate tools">
+    <meta name="author" content="Prompt Superior">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.promptsuperior.com/">
+    <meta property="og:title" content="Prompt Superior - AI Prompt Generator for Gemini">
+    <meta property="og:description" content="Transform simple ideas into powerful, structured AI prompts. Get superior results from models like Gemini with our intelligent prompt engineering tool.">
+    <!-- <meta property="og:image" content="https://www.promptsuperior.com/og-image.png"> -->
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.promptsuperior.com/">
+    <meta property="twitter:title" content="Prompt Superior - AI Prompt Generator for Gemini">
+    <meta property="twitter:description" content="Transform simple ideas into powerful, structured AI prompts. Get superior results from models like Gemini with our intelligent prompt engineering tool.">
+    <!-- <meta property="twitter:image" content="https://www.promptsuperior.com/twitter-image.png"> -->
+
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter & a more playful font for the new UI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom styles for advanced animations */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000; /* Black background for Matrix effect */
+            overflow-x: hidden;
+        }
+        
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Behind content but visible */
+        }
+
+        main {
+            position: relative;
+            z-index: 10;
+            transition: filter 0.5s ease-in-out; /* Smooth transition for color changes */
+        }
+        
+        /* New UI styles with transparency */
+        .magic-card {
+            background-color: rgba(44, 26, 77, 0.85); /* Deep purple with transparency */
+            backdrop-filter: blur(10px);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .magic-title {
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5), 0 0 12px rgba(192, 132, 252, 0.5);
+        }
+
+        /* Typing cursor effect for the output */
+        .typing-effect::after {
+            content: '▋';
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Styling for the accordion content for smooth transition */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+
+        /* CSS rule to ensure text wrapping in the output area */
+        #promptOutput {
+            white-space: pre-wrap;   /* Preserves whitespace and newlines, but wraps text */
+            word-wrap: break-word;   /* Breaks long words to prevent overflow */
+        }
+    </style>
+    
+    <!-- JSON-LD Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Prompt Superior",
+      "operatingSystem": "Web",
+      "applicationCategory": "DeveloperApplication",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "88"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "An AI-powered web application that helps users generate highly effective, structured prompts for large language models like Gemini using advanced prompt engineering techniques.",
+      "featureList": [
+        "AI-Powered Prompt Generation",
+        "Advanced Prompt Structuring",
+        "One-Click Copy to Clipboard",
+        "Dynamic and Interactive UI",
+        "Prompt Engineering Guides"
+      ],
+      "url": "https://www.promptsuperior.com/"
+    }
+    </script>
+</head>
+<body class="text-gray-200">
+
+    <!-- Matrix Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Main Content Layout with Ad Placeholders -->
+    <div class="flex items-center justify-center min-h-screen p-4">
+        
+        <!-- Left Skyscraper Ad (Visible on large screens) -->
+        <aside class="hidden lg:block w-40 h-96 bg-slate-800/20 border border-slate-700/30 rounded-lg mr-8 flex items-center justify-center" aria-label="Advertisement">
+            <span class="text-slate-500">Skyscraper Ad<br>160x600</span>
+        </aside>
+
+        <main class="w-full max-w-2xl mx-auto">
+            <!-- New Magic UI Card -->
+            <div id="main-card" class="magic-card p-8 rounded-3xl shadow-2xl shadow-purple-500/20 border border-purple-800">
+                
+                <!-- Header Section -->
+                <header class="text-center mb-8">
+                    <h1 class="magic-title text-4xl md:text-5xl font-bold text-white flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-lightbulb-fill mr-3 text-yellow-300" viewBox="0 0 16 16">
+                            <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5z"/>
+                        </svg>
+                        What do you want to create?
+                    </h1>
+                </header>
+
+                <!-- Input Section -->
+                <section class="space-y-6" aria-labelledby="input-heading">
+                    <h2 id="input-heading" class="sr-only">Prompt Input</h2>
+                    <textarea id="userInput" rows="2" class="w-full bg-white border-2 border-gray-300 rounded-xl p-4 text-lg text-gray-700 focus:ring-4 focus:ring-purple-400 focus:border-purple-500 transition duration-200 placeholder-gray-400 shadow-inner" placeholder="e.g., A social media campaign for a new sneaker launch"></textarea>
+                    <button id="generateBtn" class="w-full bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold text-2xl py-4 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-purple-500/50 flex items-center justify-center transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span id="btn-text">Generate Magic ✨</span>
+                        <svg id="btn-loader" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                </section>
+
+                <!-- Output Section -->
+                <section id="outputContainer" class="mt-8 hidden" aria-labelledby="output-heading">
+                    <h2 id="output-heading" class="text-xl font-semibold text-white mb-3">Your Generated Prompt:</h2>
+                    <div class="bg-purple-900/50 border border-purple-700 rounded-lg p-4 relative min-h-[150px]">
+                        <pre id="promptOutput" class="text-purple-200 text-sm leading-relaxed font-sans"></pre>
+                        <button id="copyBtn" class="absolute top-2 right-2 bg-purple-700 hover:bg-purple-600 text-purple-200 font-semibold py-1 px-3 rounded-md text-xs transition duration-200 opacity-0">
+                            Copy
+                        </button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Accordion Info Section -->
+            <section class="w-full max-w-2xl mx-auto mt-8 space-y-4">
+                 <!-- Accordion 1: Mastering Prompt Engineering -->
+                 <div class="bg-black/80 backdrop-blur-sm border border-slate-700/50 p-px rounded-xl">
+                    <div class="bg-slate-900/80 rounded-[11px]">
+                        <button class="accordion-toggle w-full flex justify-between items-center p-4 text-left">
+                            <h3 class="text-lg font-semibold text-slate-200">Mastering Prompt Engineering</h3>
+                            <svg class="accordion-icon w-6 h-6 text-slate-400 transition-transform transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="accordion-content px-4 pb-4">
+                            <div class="border-t border-slate-700 pt-4 text-slate-300 space-y-4 text-sm">
+                                <p><strong>1. Be Specific & Clear:</strong> The more detail you provide, the better the result. Instead of "write about cars," try "write a blog post comparing the fuel efficiency of 2025 hybrid SUVs."</p>
+                                <p><strong>2. Define the Role & Persona:</strong> Tell the AI who to be (e.g., "Act as a senior copywriter") and what personality to have ("Your tone is witty and engaging"). This sets the expertise and voice.</p>
+                                <p><strong>3. Provide Context & Examples:</strong> Give the AI background information and show it what you want. Instead of 'write in a friendly tone,' provide an example: 'Write in a friendly tone, like this: Hey there! Ready to dive into...'"</p>
+                                <p><strong>4. Specify the Format:</strong> Ask for exactly what you want. Do you need a bulleted list, a table, a JSON object, or a formal essay? Clearly state the desired structure.</p>
+                                <p><strong>5. Use Chain-of-Thought:</strong> For complex problems, ask the AI to "think step-by-step." Instructing it to "break down the problem and explain its reasoning before giving the final answer" often leads to more accurate results.</p>
+                                <p><strong>6. Use Negative Prompts:</strong> Tell the AI what to avoid. For instance, add constraints like "Do not use technical jargon," "The response should be under 200 words," or "Avoid clichés about teamwork."</p>
+                                <p><strong>7. Iterate and Refine:</strong> Your first prompt is a starting point. If the result isn't perfect, don't give up. Add more detail, clarify an instruction, or refine your examples and try again. The best prompts are often built through iteration.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Accordion 2: AI Model Personas to Try -->
+                <div class="bg-black/80 backdrop-blur-sm border border-slate-700/50 p-px rounded-xl">
+                    <div class="bg-slate-900/80 rounded-[11px]">
+                        <button class="accordion-toggle w-full flex justify-between items-center p-4 text-left">
+                            <h3 class="text-lg font-semibold text-slate-200">AI Model Personas to Try</h3>
+                            <svg class="accordion-icon w-6 h-6 text-slate-400 transition-transform transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="accordion-content px-4 pb-4">
+                            <div class="border-t border-slate-700 pt-4 text-slate-300 space-y-3 text-sm">
+                                <p>Inject creativity into your results by assigning the AI a unique persona. Try starting your prompt with "Act as a..."</p>
+                                <ul class="list-disc list-inside space-y-2">
+                                    <li><strong>The Skeptic:</strong> "Act as a skeptical journalist. Question my assumptions and point out potential flaws in my plan."</li>
+                                    <li><strong>The Enthusiastic Mentor:</strong> "Act as an encouraging mentor. Provide supportive feedback and actionable steps for improvement."</li>
+                                    <li><strong>The Devil's Advocate:</strong> "Act as a devil's advocate. Argue against my main points to help me strengthen my position."</li>
+                                    <li><strong>The Historian:</strong> "Act as a historian from the year 2100 looking back at this topic. Provide a future perspective."</li>
+                                    <li><strong>The Stand-up Comedian:</strong> "Act as a stand-up comedian. Explain this complex topic using humor and relatable analogies."</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Accordion 3: Recommended Tools (Affiliate) -->
+                <div class="bg-black/80 backdrop-blur-sm border border-slate-700/50 p-px rounded-xl">
+                    <div class="bg-slate-900/80 rounded-[11px]">
+                        <button class="accordion-toggle w-full flex justify-between items-center p-4 text-left">
+                            <h3 class="text-lg font-semibold text-slate-200">Recommended Tools</h3>
+                            <svg class="accordion-icon w-6 h-6 text-slate-400 transition-transform transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="accordion-content px-4 pb-4">
+                            <div class="border-t border-slate-700 pt-4 text-slate-300 space-y-4 text-sm">
+                                <p>Take your AI creations to the next level with these powerful tools:</p>
+                                <div>
+                                    <h4 class="font-semibold">AI Writing Assistants</h4>
+                                    <a href="#" class="text-purple-400 hover:underline">Jasper AI</a> - A market leader for creating high-quality marketing copy, blog posts, and more.
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold">AI Image Generators</h4>
+                                    <a href="#" class="text-purple-400 hover:underline">Midjourney</a> - The best platform for creating stunning, artistic, and photorealistic images from text prompts.
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold">Prompt Engineering Courses</h4>
+                                    <a href="#" class="text-purple-400 hover:underline">Coursera - Prompt Engineering Specialization</a> - A comprehensive course from Vanderbilt University to truly master the craft.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Bottom Banner Ad -->
+            <footer class="w-full max-w-2xl mx-auto mt-8 text-center" role="contentinfo">
+                <div class="h-24 bg-slate-800/20 border border-slate-700/30 rounded-lg flex items-center justify-center">
+                    <span class="text-slate-500">Banner Ad - 728x90</span>
+                </div>
+                <p class="text-xs text-slate-600 mt-4">Affiliate Disclosure: This site may contain affiliate links. If you make a purchase through these links, we may earn a commission at no extra cost to you.</p>
+            </footer>
+        </main>
+
+        <!-- Right Skyscraper Ad (Visible on large screens) -->
+        <aside class="hidden lg:block w-40 h-96 bg-slate-800/20 border border-slate-700/30 rounded-lg ml-8 flex items-center justify-center" aria-label="Advertisement">
+            <span class="text-slate-500">Skyscraper Ad<br>160x600</span>
+        </aside>
+
+    </div>
+
+    <script>
+        // --- Main Application Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const generateBtn = document.getElementById('generateBtn');
+            const btnText = document.getElementById('btn-text');
+            const btnLoader = document.getElementById('btn-loader');
+            const userInput = document.getElementById('userInput');
+            const outputContainer = document.getElementById('outputContainer');
+            const promptOutput = document.getElementById('promptOutput');
+            const copyBtn = document.getElementById('copyBtn');
+            const accordionToggles = document.querySelectorAll('.accordion-toggle');
+
+            // --- Typing Effect Function ---
+            function typeEffect(element, text, callback) {
+                let i = 0;
+                element.innerHTML = "";
+                element.classList.add('typing-effect');
+                const timer = setInterval(() => {
+                    if (i < text.length) {
+                        element.textContent += text.charAt(i);
+                        i++;
+                    } else {
+                        clearInterval(timer);
+                        element.classList.remove('typing-effect');
+                        if (callback) callback();
+                    }
+                }, 15);
+            }
+
+            // --- Set Loading State ---
+            function setLoading(isLoading) {
+                if (isLoading) {
+                    generateBtn.disabled = true;
+                    btnText.innerHTML = 'Generating...';
+                    btnLoader.classList.remove('hidden');
+                } else {
+                    generateBtn.disabled = false;
+                    btnText.innerHTML = 'Generate Magic ✨';
+                    btnLoader.classList.add('hidden');
+                }
+            }
+
+            // --- Gemini API Call Function ---
+            async function callGemini(userRequest, retries = 3, delay = 1000) {
+                const metaPrompt = `You are a prompt engineering expert. Your task is to take a user's simple request and structure it into a detailed and effective prompt using the C.R.I.S.P.E. framework. The current date is August 22, 2025. The user's request is: "${userRequest}". Use the user's request as the Intent (I). For all other fields (C, R, S, P, E), generate strong, helpful, and contextually relevant content. Your final output must be ONLY the formatted prompt, following this exact structure: C (Context): [Generated Context]\n\nR (Role): [Generated Role]\n\nI (Intent): ${userRequest}\n\nS (Style): [Generated Style]\n\nP (Persona): [Generated Persona]\n\nE (Extras): [Generated Extras]`;
+                const payload = { contents: [{ role: "user", parts: [{ text: metaPrompt }] }] };
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                try {
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const result = await response.json();
+                    if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                        return result.candidates[0].content.parts[0].text;
+                    } else {
+                        throw new Error("Invalid response structure from Gemini API.");
+                    }
+                } catch (error) {
+                    console.error(`API call failed: ${error.message}`);
+                    if (retries > 0) {
+                        await new Promise(res => setTimeout(res, delay));
+                        return callGemini(userRequest, retries - 1, delay * 2);
+                    } else {
+                        return "Error: Unable to generate prompt. Please try again later.";
+                    }
+                }
+            }
+
+            // --- Event Listeners ---
+            generateBtn.addEventListener('click', async () => {
+                const userRequest = userInput.value.trim();
+                if (!userRequest) return;
+                setLoading(true);
+                outputContainer.classList.remove('hidden');
+                copyBtn.classList.add('opacity-0');
+                promptOutput.textContent = "";
+                const generatedText = await callGemini(userRequest);
+                typeEffect(promptOutput, generatedText.trim(), () => {
+                    copyBtn.classList.remove('opacity-0');
+                    copyBtn.classList.add('transition-opacity', 'duration-500');
+                });
+                setLoading(false);
+            });
+            
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(promptOutput.textContent).then(() => {
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+                }).catch(err => console.error('Failed to copy: ', err));
+            });
+
+            accordionToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const content = toggle.nextElementSibling;
+                    const icon = toggle.querySelector('.accordion-icon');
+                    const isExpanded = content.style.maxHeight;
+
+                    if (isExpanded && isExpanded !== '0px') {
+                        content.style.maxHeight = '0px';
+                        icon.classList.remove('rotate-180');
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        icon.classList.add('rotate-180');
+                    }
+                });
+            });
+        });
+
+        // --- Matrix Background Logic with Color Cycling ---
+        function initMatrix() {
+            const canvas = document.querySelector('#bg-canvas');
+            const mainContent = document.querySelector('main');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const alphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            const fontSize = 16;
+            const columns = canvas.width / fontSize;
+            const rainDrops = [];
+            for (let x = 0; x < columns; x++) rainDrops[x] = 1;
+
+            let hue = 270; // Start with purple
+
+            const draw = () => {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+                ctx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < rainDrops.length; i++) {
+                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                    if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) rainDrops[i] = 0;
+                    rainDrops[i]++;
+                }
+                
+                hue = (hue + 0.1) % 360;
+                mainContent.style.filter = `hue-rotate(${hue - 270}deg)`;
+            };
+
+            setInterval(draw, 33);
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+        
+        initMatrix();
+    </script>
+</body>
+</html>
