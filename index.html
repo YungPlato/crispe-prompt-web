@@ -310,12 +310,14 @@
             async function callGemini(userRequest, retries = 3, delay = 1000) {
                 const metaPrompt = `You are a prompt engineering expert. Your task is to take a user's simple request and structure it into a detailed and effective prompt using the C.R.I.S.P.E. framework. The current date is August 22, 2025. The user's request is: "${userRequest}". Use the user's request as the Intent (I). For all other fields (C, R, S, P, E), generate strong, helpful, and contextually relevant content. Your final output must be ONLY the formatted prompt, following this exact structure: C (Context): [Generated Context]\n\nR (Role): [Generated Role]\n\nI (Intent): ${userRequest}\n\nS (Style): [Generated Style]\n\nP (Persona): [Generated Persona]\n\nE (Extras): [Generated Extras]`;
                 const payload = { contents: [{ role: "user", parts: [{ text: metaPrompt }] }] };
-                const apiKey = ""; 
+                
+                // --- API Key Section ---
+                const apiKey = "AIzaSyDlvTN7-Il4MSSRkFSLXXTyWRyKTb0RJsw"; 
+                
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
                 try {
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                     
-                    // NEW: Better error handling
                     if (!response.ok) {
                         const errorBody = await response.json();
                         const errorMessage = errorBody?.error?.message || `HTTP error! status: ${response.status}`;
@@ -325,7 +327,11 @@
                     const result = await response.json();
                     if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
                         return result.candidates[0].content.parts[0].text;
-                    } else {
+                    } else if (result.promptFeedback && result.promptFeedback.blockReason) {
+                        // Handle cases where the prompt was blocked
+                        return `Error: Prompt was blocked. Reason: ${result.promptFeedback.blockReason}. Please modify your request.`;
+                    }
+                    else {
                         throw new Error("Invalid response structure from Gemini API.");
                     }
                 } catch (error) {
@@ -334,7 +340,6 @@
                         await new Promise(res => setTimeout(res, delay));
                         return callGemini(userRequest, retries - 1, delay * 2);
                     } else {
-                        // Return the specific error message to the user
                         return `Error: ${error.message}\n\nUnable to generate prompt. This may be due to API limits or a network issue. Please try again later.`;
                     }
                 }
