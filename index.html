@@ -196,7 +196,7 @@
                         </div>
                     </div>
                     <button id="generateBtn" class="w-full bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold text-2xl py-4 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-purple-500/50 flex items-center justify-center transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span id="btn-text">Generate Magic ✨</span>
+                        <span id="btn-text">Craft Prompt ✨</span>
                         <svg id="btn-loader" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -220,6 +220,7 @@
                         <button id="regenerateBtn" class="bg-purple-700 hover:bg-purple-600 text-white text-xs px-3 py-2 rounded-md">Regenerate</button>
                         <button id="exportMdBtn" class="bg-slate-800/70 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-md border border-slate-600/60">Export .md</button>
                         <button id="exportJsonBtn" class="bg-slate-800/70 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-md border border-slate-600/60">Export .json</button>
+                        <button id="shareLinkBtn" class="bg-slate-800/70 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-md border border-slate-600/60">Share Link</button>
                     </div>
                     <div class="bg-purple-900/50 border border-purple-700 rounded-lg p-4 relative min-h-[150px]">
                         <pre id="promptOutput" class="text-purple-200 text-sm leading-relaxed font-sans"></pre>
@@ -366,6 +367,7 @@
             const exportMdBtn = document.getElementById('exportMdBtn');
             const exportJsonBtn = document.getElementById('exportJsonBtn');
             const regenerateBtn = document.getElementById('regenerateBtn');
+            const shareLinkBtn = document.getElementById('shareLinkBtn');
 
             // --- Typing Effect Function ---
             function typeEffect(element, text, callback) {
@@ -438,11 +440,11 @@
             function setLoading(isLoading) {
                 if (isLoading) {
                     generateBtn.disabled = true;
-                    btnText.innerHTML = 'Generating...';
+                    btnText.innerHTML = 'Crafting...';
                     btnLoader.classList.remove('hidden');
                 } else {
                     generateBtn.disabled = false;
-                    btnText.innerHTML = 'Generate Magic ✨';
+                    btnText.innerHTML = 'Craft Prompt ✨';
                     btnLoader.classList.add('hidden');
                 }
             }
@@ -599,6 +601,58 @@
                     }
                 };
                 download('prompt.json', JSON.stringify(data, null, 2), 'application/json');
+            });
+
+            // --- Shareable Link ---
+            function stateToQuery() {
+                const params = new URLSearchParams({
+                    q: userInput.value.trim(),
+                    f: frameworkSelect.value,
+                    t: toneSelect.value,
+                    l: lengthSelect.value,
+                    temp: creativitySlider.value,
+                    p: personaInput.value.trim()
+                });
+                return params.toString();
+            }
+            function applyStateFromQuery() {
+                const url = new URL(window.location.href);
+                const q = url.searchParams.get('q');
+                const f = url.searchParams.get('f');
+                const t = url.searchParams.get('t');
+                const l = url.searchParams.get('l');
+                const temp = url.searchParams.get('temp');
+                const p = url.searchParams.get('p');
+                if (q) userInput.value = q;
+                if (f) frameworkSelect.value = f;
+                if (t) toneSelect.value = t;
+                if (l) lengthSelect.value = l;
+                if (temp) { creativitySlider.value = temp; creativityValue.textContent = temp; }
+                if (p) personaInput.value = p;
+            }
+            applyStateFromQuery();
+            shareLinkBtn.addEventListener('click', async () => {
+                const base = window.location.origin + window.location.pathname;
+                const link = `${base}?${stateToQuery()}`;
+                await navigator.clipboard.writeText(link);
+                shareLinkBtn.textContent = 'Link Copied!';
+                setTimeout(() => { shareLinkBtn.textContent = 'Share Link'; }, 1500);
+            });
+
+            // --- Hotkeys ---
+            document.addEventListener('keydown', (e) => {
+                const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                const primary = isMac ? e.metaKey : e.ctrlKey;
+                if (primary && e.key === 'Enter') {
+                    e.preventDefault();
+                    generateBtn.click();
+                } else if (primary && e.shiftKey && e.key.toLowerCase() === 'r') {
+                    e.preventDefault();
+                    regenerateBtn.click();
+                } else if (primary && e.shiftKey && e.key.toLowerCase() === 'c') {
+                    e.preventDefault();
+                    copyBtn.click();
+                }
             });
             
             copyBtn.addEventListener('click', () => {
