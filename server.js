@@ -53,7 +53,17 @@ app.post('/api/generate', async (req, res) => {
       body: JSON.stringify({ contents, generationConfig })
     });
 
-    const data = await upstream.json();
+    // Try to parse JSON; if it fails, fallback to text and wrap in JSON
+    let data;
+    try {
+      data = await upstream.json();
+    } catch (e) {
+      const text = await upstream.text();
+      const message = `Upstream non-JSON (${upstream.status}): ${text.slice(0, 300)}`;
+      console.error('[Gemini Upstream Error]', message);
+      return res.status(upstream.status || 502).json({ error: { message } });
+    }
+
     if (!upstream.ok) {
       return res.status(upstream.status).json(data);
     }
