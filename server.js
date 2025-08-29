@@ -24,7 +24,7 @@ app.post('/api/generate', async (req, res) => {
       return res.status(500).json({ error: { message: 'Server misconfigured: missing GOOGLE_API_KEY' } });
     }
 
-    const { contents } = req.body || {};
+    const { contents, generationConfig } = req.body || {};
     if (!contents) {
       return res.status(400).json({ error: { message: 'Missing contents in request body' } });
     }
@@ -35,7 +35,7 @@ app.post('/api/generate', async (req, res) => {
     const upstream = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents })
+      body: JSON.stringify({ contents, generationConfig })
     });
 
     const data = await upstream.json();
