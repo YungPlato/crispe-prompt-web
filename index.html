@@ -234,7 +234,13 @@
                 <section id="historySection" class="mt-6" aria-labelledby="history-heading">
                     <div class="flex items-center justify-between mb-2">
                         <h2 id="history-heading" class="text-sm font-semibold text-slate-200">History</h2>
-                        <button id="clearHistoryBtn" class="text-xs text-slate-300 hover:text-white underline">Clear</button>
+                        <div class="flex items-center gap-3">
+                            <label class="flex items-center gap-1 text-xs text-slate-300">
+                                <input id="compactHistoryToggle" type="checkbox" class="accent-purple-500">
+                                Compact
+                            </label>
+                            <button id="clearHistoryBtn" class="text-xs text-slate-300 hover:text-white underline">Clear</button>
+                        </div>
                     </div>
                     <ul id="historyList" class="space-y-2"></ul>
                 </section>
@@ -388,6 +394,7 @@
             const copyBtn = document.getElementById('copyBtn');
             const historyList = document.getElementById('historyList');
             const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+            const compactHistoryToggle = document.getElementById('compactHistoryToggle');
             const accordionToggles = document.querySelectorAll('.accordion-toggle');
             const themeToggle = document.getElementById('themeToggle');
             const exportMdBtn = document.getElementById('exportMdBtn');
@@ -427,14 +434,17 @@
                 historyList.innerHTML = '';
                 items.forEach((item, idx) => {
                     const li = document.createElement('li');
-                    li.className = 'bg-slate-900/60 border border-slate-700/50 rounded-lg p-3 text-xs flex justify-between items-start gap-2';
+                    const compact = compactHistoryToggle && compactHistoryToggle.checked;
+                    li.className = compact
+                        ? 'bg-slate-900/60 border border-slate-700/50 rounded-lg p-2 text-[11px] flex justify-between items-start gap-2'
+                        : 'bg-slate-900/60 border border-slate-700/50 rounded-lg p-3 text-xs flex justify-between items-start gap-2';
                     const text = document.createElement('div');
-                    text.className = 'text-slate-300 line-clamp-2 break-words';
+                    text.className = compact ? 'text-slate-300 truncate max-w-[70%]' : 'text-slate-300 line-clamp-2 break-words';
                     text.textContent = item.prompt;
                     const right = document.createElement('div');
-                    right.className = 'flex items-center gap-2';
+                    right.className = compact ? 'flex items-center gap-1' : 'flex items-center gap-2';
                     const copy = document.createElement('button');
-                    copy.className = 'text-slate-300 hover:text-white underline';
+                    copy.className = compact ? 'text-slate-300 hover:text-white underline' : 'text-slate-300 hover:text-white underline';
                     copy.textContent = 'Copy';
                     copy.addEventListener('click', () => navigator.clipboard.writeText(item.prompt));
                     const replay = document.createElement('button');
@@ -459,6 +469,7 @@
             }
             renderHistory();
             clearHistoryBtn.addEventListener('click', () => { saveHistory([]); renderHistory(); });
+            if (compactHistoryToggle) compactHistoryToggle.addEventListener('change', renderHistory);
 
             creativitySlider.addEventListener('input', () => { creativityValue.textContent = creativitySlider.value; });
 
