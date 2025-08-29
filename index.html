@@ -143,19 +143,58 @@
             <div id="main-card" class="magic-card p-8 rounded-3xl shadow-2xl shadow-purple-500/20 border border-purple-800">
                 
                 <!-- Header Section -->
-                <header class="text-center mb-8">
-                    <h1 class="magic-title text-4xl md:text-5xl font-bold text-white flex items-center justify-center">
+                <header class="mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h1 class="magic-title text-3xl md:text-4xl font-bold text-white flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-lightbulb-fill mr-3 text-yellow-300" viewBox="0 0 16 16">
                             <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5z"/>
                         </svg>
                         What do you want to create?
-                    </h1>
+                        </h1>
+                        <button id="themeToggle" class="bg-slate-800/60 hover:bg-slate-700 text-slate-200 px-3 py-2 rounded-lg text-xs border border-slate-600/60">Toggle Theme</button>
+                    </div>
                 </header>
 
                 <!-- Input Section -->
                 <section class="space-y-6" aria-labelledby="input-heading">
                     <h2 id="input-heading" class="sr-only">Prompt Input</h2>
                     <textarea id="userInput" rows="2" class="w-full bg-white border-2 border-gray-300 rounded-xl p-4 text-lg text-gray-700 focus:ring-4 focus:ring-purple-400 focus:border-purple-500 transition duration-200 placeholder-gray-400 shadow-inner" placeholder="e.g., A social media campaign for a new sneaker launch"></textarea>
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <div>
+                            <label for="frameworkSelect" class="block text-sm text-slate-200 mb-1">Framework</label>
+                            <select id="frameworkSelect" class="w-full bg-white border-2 border-gray-300 rounded-xl p-3 text-gray-700 focus:ring-4 focus:ring-purple-400 focus:border-purple-500">
+                                <option value="CRISPE">CRISPE (Context, Role, Intent, Style, Persona, Extras)</option>
+                                <option value="AIDA">AIDA (Attention, Interest, Desire, Action)</option>
+                                <option value="PAS">PAS (Problem, Agitation, Solution)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="toneSelect" class="block text-sm text-slate-200 mb-1">Tone</label>
+                            <select id="toneSelect" class="w-full bg-white border-2 border-gray-300 rounded-xl p-3 text-gray-700 focus:ring-4 focus:ring-purple-400 focus:border-purple-500">
+                                <option value="Neutral" selected>Neutral</option>
+                                <option value="Friendly">Friendly</option>
+                                <option value="Professional">Professional</option>
+                                <option value="Persuasive">Persuasive</option>
+                                <option value="Playful">Playful</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="lengthSelect" class="block text-sm text-slate-200 mb-1">Length</label>
+                            <select id="lengthSelect" class="w-full bg-white border-2 border-gray-300 rounded-xl p-3 text-gray-700 focus:ring-4 focus:ring-purple-400 focus:border-purple-500">
+                                <option value="short">Short (~200 words)</option>
+                                <option value="medium" selected>Medium (~500 words)</option>
+                                <option value="long">Long (~1000+ words)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="creativitySlider" class="block text-sm text-slate-200 mb-1">Creativity (temperature): <span id="creativityValue">0.7</span></label>
+                            <input id="creativitySlider" type="range" min="0.1" max="1" step="0.1" value="0.7" class="w-full accent-purple-500">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="personaInput" class="block text-sm text-slate-200 mb-1">Persona (optional)</label>
+                            <input id="personaInput" type="text" placeholder="e.g., Senior copywriter in tech, Growth marketer, Data-driven strategist" class="w-full bg-white border-2 border-gray-300 rounded-xl p-3 text-gray-700 focus:ring-4 focus:ring-purple-400 focus:border-purple-500" />
+                        </div>
+                    </div>
                     <button id="generateBtn" class="w-full bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold text-2xl py-4 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-purple-500/50 flex items-center justify-center transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
                         <span id="btn-text">Generate Magic ✨</span>
                         <svg id="btn-loader" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -164,10 +203,24 @@
                         </svg>
                     </button>
                 </section>
+                
+                <!-- History Section -->
+                <section id="historySection" class="mt-6" aria-labelledby="history-heading">
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 id="history-heading" class="text-sm font-semibold text-slate-200">History</h2>
+                        <button id="clearHistoryBtn" class="text-xs text-slate-300 hover:text-white underline">Clear</button>
+                    </div>
+                    <ul id="historyList" class="space-y-2"></ul>
+                </section>
 
-                <!-- Output Section -->
+                <!-- Output Section and Toolbar -->
                 <section id="outputContainer" class="mt-8 hidden" aria-labelledby="output-heading">
                     <h2 id="output-heading" class="text-xl font-semibold text-white mb-3">Your Generated Prompt:</h2>
+                    <div class="flex items-center gap-2 mb-2">
+                        <button id="regenerateBtn" class="bg-purple-700 hover:bg-purple-600 text-white text-xs px-3 py-2 rounded-md">Regenerate</button>
+                        <button id="exportMdBtn" class="bg-slate-800/70 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-md border border-slate-600/60">Export .md</button>
+                        <button id="exportJsonBtn" class="bg-slate-800/70 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-md border border-slate-600/60">Export .json</button>
+                    </div>
                     <div class="bg-purple-900/50 border border-purple-700 rounded-lg p-4 relative min-h-[150px]">
                         <pre id="promptOutput" class="text-purple-200 text-sm leading-relaxed font-sans"></pre>
                         <button id="copyBtn" class="absolute top-2 right-2 bg-purple-700 hover:bg-purple-600 text-purple-200 font-semibold py-1 px-3 rounded-md text-xs transition duration-200 opacity-0">
@@ -297,10 +350,22 @@
             const btnText = document.getElementById('btn-text');
             const btnLoader = document.getElementById('btn-loader');
             const userInput = document.getElementById('userInput');
+            const frameworkSelect = document.getElementById('frameworkSelect');
+            const toneSelect = document.getElementById('toneSelect');
+            const lengthSelect = document.getElementById('lengthSelect');
+            const creativitySlider = document.getElementById('creativitySlider');
+            const creativityValue = document.getElementById('creativityValue');
+            const personaInput = document.getElementById('personaInput');
             const outputContainer = document.getElementById('outputContainer');
             const promptOutput = document.getElementById('promptOutput');
             const copyBtn = document.getElementById('copyBtn');
+            const historyList = document.getElementById('historyList');
+            const clearHistoryBtn = document.getElementById('clearHistoryBtn');
             const accordionToggles = document.querySelectorAll('.accordion-toggle');
+            const themeToggle = document.getElementById('themeToggle');
+            const exportMdBtn = document.getElementById('exportMdBtn');
+            const exportJsonBtn = document.getElementById('exportJsonBtn');
+            const regenerateBtn = document.getElementById('regenerateBtn');
 
             // --- Typing Effect Function ---
             function typeEffect(element, text, callback) {
@@ -319,6 +384,56 @@
                 }, 15);
             }
 
+            // --- History Helpers ---
+            function loadHistory() {
+                try {
+                    const raw = localStorage.getItem('ps_history');
+                    return raw ? JSON.parse(raw) : [];
+                } catch { return []; }
+            }
+            function saveHistory(items) {
+                localStorage.setItem('ps_history', JSON.stringify(items.slice(0, 20)));
+            }
+            function renderHistory() {
+                const items = loadHistory();
+                historyList.innerHTML = '';
+                items.forEach((item, idx) => {
+                    const li = document.createElement('li');
+                    li.className = 'bg-slate-900/60 border border-slate-700/50 rounded-lg p-3 text-xs flex justify-between items-start gap-2';
+                    const text = document.createElement('div');
+                    text.className = 'text-slate-300 line-clamp-2 break-words';
+                    text.textContent = item.prompt;
+                    const right = document.createElement('div');
+                    right.className = 'flex items-center gap-2';
+                    const copy = document.createElement('button');
+                    copy.className = 'text-slate-300 hover:text-white underline';
+                    copy.textContent = 'Copy';
+                    copy.addEventListener('click', () => navigator.clipboard.writeText(item.prompt));
+                    const replay = document.createElement('button');
+                    replay.className = 'text-slate-300 hover:text-white underline';
+                    replay.textContent = 'Replay';
+                    replay.addEventListener('click', async () => {
+                        userInput.value = item.userRequest;
+                        frameworkSelect.value = item.framework;
+                        toneSelect.value = item.tone;
+                        lengthSelect.value = item.length;
+                        creativitySlider.value = item.temperature;
+                        creativityValue.textContent = item.temperature;
+                        personaInput.value = item.persona || '';
+                        generateBtn.click();
+                    });
+                    right.appendChild(copy);
+                    right.appendChild(replay);
+                    li.appendChild(text);
+                    li.appendChild(right);
+                    historyList.appendChild(li);
+                });
+            }
+            renderHistory();
+            clearHistoryBtn.addEventListener('click', () => { saveHistory([]); renderHistory(); });
+
+            creativitySlider.addEventListener('input', () => { creativityValue.textContent = creativitySlider.value; });
+
             // --- Set Loading State ---
             function setLoading(isLoading) {
                 if (isLoading) {
@@ -332,15 +447,63 @@
                 }
             }
 
-            // --- Gemini API Call Function ---
+            // --- Theme Toggle ---
+            function applyTheme(theme) {
+                const body = document.body;
+                if (theme === 'light') {
+                    body.classList.add('bg-white');
+                    body.classList.remove('text-gray-200');
+                    document.getElementById('main-card').classList.remove('magic-card');
+                    document.getElementById('main-card').classList.add('bg-white');
+                } else {
+                    body.classList.remove('bg-white');
+                    body.classList.add('text-gray-200');
+                    document.getElementById('main-card').classList.add('magic-card');
+                }
+            }
+            function initTheme() {
+                const saved = localStorage.getItem('ps_theme') || 'dark';
+                applyTheme(saved);
+                themeToggle.textContent = saved === 'light' ? 'Use Dark' : 'Use Light';
+            }
+            themeToggle.addEventListener('click', () => {
+                const current = localStorage.getItem('ps_theme') || 'dark';
+                const next = current === 'light' ? 'dark' : 'light';
+                localStorage.setItem('ps_theme', next);
+                applyTheme(next);
+                themeToggle.textContent = next === 'light' ? 'Use Dark' : 'Use Light';
+            });
+            initTheme();
+
+            // --- Gemini API Call Function (via backend proxy) ---
             async function callGemini(userRequest, retries = 3, delay = 1000) {
-                const metaPrompt = `You are a prompt engineering expert. Your task is to take a user's simple request and structure it into a detailed and effective prompt using the C.R.I.S.P.E. framework. The current date is August 22, 2025. The user's request is: "${userRequest}". Use the user's request as the Intent (I). For all other fields (C, R, S, P, E), generate strong, helpful, and contextually relevant content. Your final output must be ONLY the formatted prompt, following this exact structure: C (Context): [Generated Context]\n\nR (Role): [Generated Role]\n\nI (Intent): ${userRequest}\n\nS (Style): [Generated Style]\n\nP (Persona): [Generated Persona]\n\nE (Extras): [Generated Extras]`;
-                const payload = { contents: [{ role: "user", parts: [{ text: metaPrompt }] }] };
-                
-                // --- API Key Section ---
-                const apiKey = "AIzaSyDlvTN7-Il4MSSRkFSLXXTyWRyKTb0RJsw"; 
-                
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                const framework = frameworkSelect.value;
+                const tone = toneSelect.value;
+                const length = lengthSelect.value;
+                const temperature = parseFloat(creativitySlider.value);
+                const persona = personaInput.value.trim();
+
+                const builder = {
+                    CRISPE: () => {
+                        return `You are a prompt engineering expert. Your task is to take a user's simple request and structure it into a detailed and effective prompt using the C.R.I.S.P.E. framework. Use the user's request as the Intent (I). The tone should be ${tone}. ` +
+                        (persona ? `Adopt this persona: ${persona}. ` : '') +
+                        `Target length: ${length}. Your final output must be ONLY the formatted prompt, following this exact structure: C (Context): [Generated Context]\n\nR (Role): [Generated Role]\n\nI (Intent): ${userRequest}\n\nS (Style): [Generated Style]\n\nP (Persona): [Generated Persona]\n\nE (Extras): [Generated Extras]`;
+                    },
+                    AIDA: () => {
+                        return `You are a prompt engineering expert. Rewrite the user's request into an AIDA prompt with the tone ${tone}. ` +
+                        (persona ? `Adopt this persona: ${persona}. ` : '') +
+                        `Target length: ${length}. Output ONLY this structure: Attention: ...\n\nInterest: ...\n\nDesire: ...\n\nAction: ...\n\nUser Intent: ${userRequest}`;
+                    },
+                    PAS: () => {
+                        return `You are a prompt engineering expert. Rewrite the user's request into a PAS prompt with the tone ${tone}. ` +
+                        (persona ? `Adopt this persona: ${persona}. ` : '') +
+                        `Target length: ${length}. Output ONLY this structure: Problem: ...\n\nAgitation: ...\n\nSolution: ...\n\nUser Intent: ${userRequest}`;
+                    }
+                };
+                const metaPrompt = (builder[framework] || builder['CRISPE'])();
+                const generationConfig = { temperature };
+                const payload = { contents: [{ role: "user", parts: [{ text: metaPrompt }] }], generationConfig };
+                const apiUrl = "/api/generate";
                 try {
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                     
@@ -385,6 +548,57 @@
                     copyBtn.classList.add('transition-opacity', 'duration-500');
                 });
                 setLoading(false);
+                // Save to history
+                const items = loadHistory();
+                items.unshift({
+                    userRequest,
+                    prompt: promptOutput.textContent,
+                    framework: frameworkSelect.value,
+                    tone: toneSelect.value,
+                    length: lengthSelect.value,
+                    temperature: creativitySlider.value,
+                    persona: personaInput.value.trim(),
+                    ts: Date.now()
+                });
+                saveHistory(items);
+                renderHistory();
+            });
+            regenerateBtn.addEventListener('click', async () => {
+                const userRequest = userInput.value.trim();
+                if (!userRequest) return;
+                setLoading(true);
+                const generatedText = await callGemini(userRequest);
+                promptOutput.textContent = generatedText.trim();
+                copyBtn.classList.remove('opacity-0');
+                setLoading(false);
+            });
+            function download(filename, content, mime) {
+                const a = document.createElement('a');
+                const blob = new Blob([content], { type: mime });
+                a.href = URL.createObjectURL(blob);
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(a.href);
+            }
+            exportMdBtn.addEventListener('click', () => {
+                const text = promptOutput.textContent || '';
+                if (!text) return;
+                download('prompt.md', `# Generated Prompt\n\n${text}\n`, 'text/markdown');
+            });
+            exportJsonBtn.addEventListener('click', () => {
+                const text = promptOutput.textContent || '';
+                if (!text) return;
+                const data = {
+                    prompt: text,
+                    meta: {
+                        framework: frameworkSelect.value,
+                        tone: toneSelect.value,
+                        length: lengthSelect.value,
+                        temperature: parseFloat(creativitySlider.value),
+                        persona: personaInput.value.trim()
+                    }
+                };
+                download('prompt.json', JSON.stringify(data, null, 2), 'application/json');
             });
             
             copyBtn.addEventListener('click', () => {
@@ -428,6 +642,7 @@
 
             let hue = 270; // Start with purple
 
+            const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
             const draw = () => {
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -445,7 +660,24 @@
                 mainContent.style.filter = `hue-rotate(${hue - 270}deg)`;
             };
 
-            setInterval(draw, 33);
+            let intervalId = null;
+            function start() {
+                if (intervalId) return;
+                intervalId = setInterval(draw, 50); // slightly lower FPS for perf
+            }
+            function stop() {
+                if (!intervalId) return;
+                clearInterval(intervalId);
+                intervalId = null;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+
+            if (mediaQuery.matches) {
+                stop();
+            } else {
+                start();
+            }
+            mediaQuery.addEventListener('change', (e) => { e.matches ? stop() : start(); });
 
             window.addEventListener('resize', () => {
                 canvas.width = window.innerWidth;
