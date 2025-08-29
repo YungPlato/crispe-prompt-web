@@ -549,12 +549,24 @@
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                     
                     if (!response.ok) {
-                        const errorBody = await response.json();
-                        const errorMessage = errorBody?.error?.message || `HTTP error! status: ${response.status}`;
+                        let errorMessage = `HTTP error! status: ${response.status}`;
+                        try {
+                            const errorBody = await response.json();
+                            errorMessage = errorBody?.error?.message || errorMessage;
+                        } catch {
+                            const text = await response.text();
+                            errorMessage = text?.slice(0, 200) || errorMessage;
+                        }
                         throw new Error(errorMessage);
                     }
 
-                    const result = await response.json();
+                    let result;
+                    try {
+                        result = await response.json();
+                    } catch {
+                        const text = await response.text();
+                        throw new Error(text?.slice(0, 200) || 'Invalid JSON response from server');
+                    }
                     if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
                         return result.candidates[0].content.parts[0].text;
                     } else if (result.promptFeedback && result.promptFeedback.blockReason) {
