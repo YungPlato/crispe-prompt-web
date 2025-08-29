@@ -143,13 +143,16 @@
             <div id="main-card" class="magic-card p-8 rounded-3xl shadow-2xl shadow-purple-500/20 border border-purple-800">
                 
                 <!-- Header Section -->
-                <header class="text-center mb-8">
-                    <h1 class="magic-title text-4xl md:text-5xl font-bold text-white flex items-center justify-center">
+                <header class="mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h1 class="magic-title text-3xl md:text-4xl font-bold text-white flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-lightbulb-fill mr-3 text-yellow-300" viewBox="0 0 16 16">
                             <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5z"/>
                         </svg>
                         What do you want to create?
-                    </h1>
+                        </h1>
+                        <button id="themeToggle" class="bg-slate-800/60 hover:bg-slate-700 text-slate-200 px-3 py-2 rounded-lg text-xs border border-slate-600/60">Toggle Theme</button>
+                    </div>
                 </header>
 
                 <!-- Input Section -->
@@ -210,9 +213,14 @@
                     <ul id="historyList" class="space-y-2"></ul>
                 </section>
 
-                <!-- Output Section -->
+                <!-- Output Section and Toolbar -->
                 <section id="outputContainer" class="mt-8 hidden" aria-labelledby="output-heading">
                     <h2 id="output-heading" class="text-xl font-semibold text-white mb-3">Your Generated Prompt:</h2>
+                    <div class="flex items-center gap-2 mb-2">
+                        <button id="regenerateBtn" class="bg-purple-700 hover:bg-purple-600 text-white text-xs px-3 py-2 rounded-md">Regenerate</button>
+                        <button id="exportMdBtn" class="bg-slate-800/70 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-md border border-slate-600/60">Export .md</button>
+                        <button id="exportJsonBtn" class="bg-slate-800/70 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-md border border-slate-600/60">Export .json</button>
+                    </div>
                     <div class="bg-purple-900/50 border border-purple-700 rounded-lg p-4 relative min-h-[150px]">
                         <pre id="promptOutput" class="text-purple-200 text-sm leading-relaxed font-sans"></pre>
                         <button id="copyBtn" class="absolute top-2 right-2 bg-purple-700 hover:bg-purple-600 text-purple-200 font-semibold py-1 px-3 rounded-md text-xs transition duration-200 opacity-0">
@@ -354,6 +362,10 @@
             const historyList = document.getElementById('historyList');
             const clearHistoryBtn = document.getElementById('clearHistoryBtn');
             const accordionToggles = document.querySelectorAll('.accordion-toggle');
+            const themeToggle = document.getElementById('themeToggle');
+            const exportMdBtn = document.getElementById('exportMdBtn');
+            const exportJsonBtn = document.getElementById('exportJsonBtn');
+            const regenerateBtn = document.getElementById('regenerateBtn');
 
             // --- Typing Effect Function ---
             function typeEffect(element, text, callback) {
@@ -434,6 +446,34 @@
                     btnLoader.classList.add('hidden');
                 }
             }
+
+            // --- Theme Toggle ---
+            function applyTheme(theme) {
+                const body = document.body;
+                if (theme === 'light') {
+                    body.classList.add('bg-white');
+                    body.classList.remove('text-gray-200');
+                    document.getElementById('main-card').classList.remove('magic-card');
+                    document.getElementById('main-card').classList.add('bg-white');
+                } else {
+                    body.classList.remove('bg-white');
+                    body.classList.add('text-gray-200');
+                    document.getElementById('main-card').classList.add('magic-card');
+                }
+            }
+            function initTheme() {
+                const saved = localStorage.getItem('ps_theme') || 'dark';
+                applyTheme(saved);
+                themeToggle.textContent = saved === 'light' ? 'Use Dark' : 'Use Light';
+            }
+            themeToggle.addEventListener('click', () => {
+                const current = localStorage.getItem('ps_theme') || 'dark';
+                const next = current === 'light' ? 'dark' : 'light';
+                localStorage.setItem('ps_theme', next);
+                applyTheme(next);
+                themeToggle.textContent = next === 'light' ? 'Use Dark' : 'Use Light';
+            });
+            initTheme();
 
             // --- Gemini API Call Function (via backend proxy) ---
             async function callGemini(userRequest, retries = 3, delay = 1000) {
@@ -522,6 +562,43 @@
                 });
                 saveHistory(items);
                 renderHistory();
+            });
+            regenerateBtn.addEventListener('click', async () => {
+                const userRequest = userInput.value.trim();
+                if (!userRequest) return;
+                setLoading(true);
+                const generatedText = await callGemini(userRequest);
+                promptOutput.textContent = generatedText.trim();
+                copyBtn.classList.remove('opacity-0');
+                setLoading(false);
+            });
+            function download(filename, content, mime) {
+                const a = document.createElement('a');
+                const blob = new Blob([content], { type: mime });
+                a.href = URL.createObjectURL(blob);
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(a.href);
+            }
+            exportMdBtn.addEventListener('click', () => {
+                const text = promptOutput.textContent || '';
+                if (!text) return;
+                download('prompt.md', `# Generated Prompt\n\n${text}\n`, 'text/markdown');
+            });
+            exportJsonBtn.addEventListener('click', () => {
+                const text = promptOutput.textContent || '';
+                if (!text) return;
+                const data = {
+                    prompt: text,
+                    meta: {
+                        framework: frameworkSelect.value,
+                        tone: toneSelect.value,
+                        length: lengthSelect.value,
+                        temperature: parseFloat(creativitySlider.value),
+                        persona: personaInput.value.trim()
+                    }
+                };
+                download('prompt.json', JSON.stringify(data, null, 2), 'application/json');
             });
             
             copyBtn.addEventListener('click', () => {
