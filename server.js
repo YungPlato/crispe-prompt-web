@@ -1,55 +1,51 @@
-import express from 'express';
-import cors from 'cors';
-import fetch from 'node-fetch';
-import dotenv from 'dotenv';
+const fetch = require('node-fetch');
 
-dotenv.config();
+module.exports = async (req, res) => {
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method Not Allowed' });
+    return;
+  }
 
-const app = express();
-const port = process.env.PORT || 3000;
-
-app.use(cors());
-app.use(express.json({ limit: '1mb' }));
-
-// Health check
-app.get('/health', (_req, res) => {
-  res.json({ status: 'ok' });
-});
-
-// Proxy endpoint to call Gemini securely
-app.post('/api/generate', async (req, res) => {
   try {
     const googleApiKey = process.env.GOOGLE_API_KEY;
     if (!googleApiKey) {
-      return res.status(500).json({ error: { message: 'Server misconfigured: missing GOOGLE_API_KEY' } });
+      console.error('[DEBUG] GOOGLE_API_KEY is not set.');
+      res.status(500).json({ error: { message: 'Server misconfigured: missing GOOGLE_API_KEY' } });
+      return;
     }
 
     const { contents, generationConfig } = req.body || {};
     if (!contents) {
-      return res.status(400).json({ error: { message: 'Missing contents in request body' } });
+      res.status(400).json({ error: { message: 'Missing contents in request body' } });
+      return;
     }
 
     const model = process.env.GOOGLE_MODEL || 'gemini-1.5-flash-latest';
     const url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${googleApiKey}`;
 
+    console.log(`[DEBUG] Making request to Google API.`);
     const upstream = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ contents, generationConfig })
     });
 
-    const data = await upstream.json();
+    console.log(`[DEBUG] Upstream response status: ${upstream.status}`);
+    const responseText = await upstream.text();
+    console.log(`[DEBUG] Upstream response text snippet: ${responseText.substring(0, 500)}`);
+
+    res.setHeader('Content-Type', 'application/json');
+
     if (!upstream.ok) {
-      return res.status(upstream.status).json(data);
+      console.error(`[DEBUG] Upstream request failed.`);
+      res.status(upstream.status).send(responseText); // Send the raw error back
+      return;
     }
 
-    return res.status(200).json(data);
+    res.status(200).send(responseText); // Send the successful JSON text back
+
   } catch (err) {
-    return res.status(500).json({ error: { message: err?.message || 'Unknown server error' } });
+    console.error('[DEBUG] CATCH BLOCK ERROR:', err);
+    res.status(500).json({ error: { message: err?.message || 'Unknown server error' } });
   }
-});
-
-app.listen(port, () => {
-  console.log(`Server listening on http://localhost:${port}`);
-});
-
+};
