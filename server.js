@@ -30,7 +30,7 @@ app.post('/api/generate', async (req, res) => {
     }
 
     const model = process.env.GOOGLE_MODEL || 'gemini-1.5-flash-latest';
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${googleApiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${googleApiKey}`;
 
     const upstream = await fetch(url, {
       method: 'POST',
