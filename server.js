@@ -35,7 +35,7 @@ app.post('/api/generate', async (req, res) => {
     const upstream = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents })
+      body: JSON.stringify({ contents, generationConfig })
     });
 
     const data = await upstream.json();
