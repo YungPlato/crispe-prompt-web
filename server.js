@@ -29,7 +29,7 @@ app.post('/api/generate', async (req, res) => {
       return res.status(400).json({ error: { message: 'Missing contents in request body' } });
     }
 
-    const model = process.env.GOOGLE_MODEL || 'gemini-2.5-flash-preview-05-20';
+    const model = process.env.GOOGLE_MODEL || 'gemini-1.5-flash-latest';
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${googleApiKey}`;
 
     const upstream = await fetch(url, {
