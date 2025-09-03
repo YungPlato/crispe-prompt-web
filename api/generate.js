@@ -1,26 +1,17 @@
-import express from 'express';
-import cors from 'cors';
 import fetch from 'node-fetch';
-import dotenv from 'dotenv';
 
-dotenv.config();
+export default async function handler(req, res) {
+  // Vercel automatically parses the body for POST requests
+  // It also handles CORS, so we don't need the express/cors boilerplate.
 
-const app = express();
-const port = process.env.PORT || 3000;
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  }
 
-app.use(cors());
-app.use(express.json({ limit: '1mb' }));
-
-// Health check
-app.get('/health', (_req, res) => {
-  res.json({ status: 'ok' });
-});
-
-// Proxy endpoint to call Gemini securely
-app.post('/api/generate', async (req, res) => {
   try {
     const googleApiKey = process.env.GOOGLE_API_KEY;
     if (!googleApiKey) {
+      console.error('[DEBUG] GOOGLE_API_KEY is not set.');
       return res.status(500).json({ error: { message: 'Server misconfigured: missing GOOGLE_API_KEY' } });
     }
 
@@ -50,8 +41,6 @@ app.post('/api/generate', async (req, res) => {
         const errorData = JSON.parse(responseText);
         return res.status(upstream.status).json(errorData);
       } catch (e) {
-        // If it's not JSON, it's likely the HTML error page.
-        // We return a structured error to our client, but the real details are in the Vercel logs.
         return res.status(upstream.status).json({
             error: {
                 message: "Upstream API returned a non-JSON response.",
@@ -63,15 +52,10 @@ app.post('/api/generate', async (req, res) => {
     }
 
     const data = JSON.parse(responseText);
-    return res.status(200).json(data);
+    res.status(200).json(data);
 
   } catch (err) {
     console.error('[DEBUG] CATCH BLOCK ERROR:', err);
-    return res.status(500).json({ error: { message: err?.message || 'Unknown server error' } });
+    res.status(500).json({ error: { message: err?.message || 'Unknown server error' } });
   }
-});
-
-app.listen(port, () => {
-  console.log(`Server listening on http://localhost:${port}`);
-});
-
+}
