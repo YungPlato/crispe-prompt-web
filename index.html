@@ -127,11 +127,40 @@
 </head>
 <body class="text-gray-200">
 
+    <!-- Header Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-20 bg-black/50 backdrop-blur-md border-b border-purple-800/50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+            <a href="/" class="text-xl font-bold text-white flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-lightbulb-fill mr-2 text-yellow-300" viewBox="0 0 16 16">
+                    <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+                <span>Prompt Superior</span>
+            </a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="/blog.html" class="text-gray-300 hover:text-purple-400 transition-colors">Blog</a>
+                <a href="/about.html" class="text-gray-300 hover:text-purple-400 transition-colors">About</a>
+                <a href="/contact.html" class="text-gray-300 hover:text-purple-400 transition-colors">Contact</a>
+                <a href="/how-it-works.html" class="text-gray-300 hover:text-purple-400 transition-colors">How It Works</a>
+            </div>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black/70 backdrop-blur-md">
+            <a href="/blog.html" class="block text-gray-300 hover:text-purple-400 px-6 py-3">Blog</a>
+            <a href="/about.html" class="block text-gray-300 hover:text-purple-400 px-6 py-3">About</a>
+            <a href="/contact.html" class="block text-gray-300 hover:text-purple-400 px-6 py-3">Contact</a>
+            <a href="/how-it-works.html" class="block text-gray-300 hover:text-purple-400 px-6 py-3">How It Works</a>
+        </div>
+    </header>
+
     <!-- Matrix Background Canvas -->
     <canvas id="bg-canvas"></canvas>
 
     <!-- Main Content Layout with Ad Placeholders -->
-    <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="flex items-center justify-center min-h-screen p-4 pt-24">
         
         <!-- Left Skyscraper Ad (Visible on large screens) -->
         <aside class="hidden lg:block w-40 h-96 bg-slate-800/20 border border-slate-700/30 rounded-lg mr-8 flex items-center justify-center" aria-label="Advertisement">
@@ -346,6 +375,15 @@
     <script>
         // --- Main Application Logic ---
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Mobile Menu Toggle ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuButton) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
             const generateBtn = document.getElementById('generateBtn');
             const btnText = document.getElementById('btn-text');
             const btnLoader = document.getElementById('btn-loader');
