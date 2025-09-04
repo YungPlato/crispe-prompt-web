@@ -107,6 +107,7 @@
             color: var(--text-color-secondary);
         }
         .light-theme .text-purple-200 { color: #6d28d9; }
+        .light-theme a.text-purple-400 { color: #6d28d9; }
         .light-theme a.text-purple-400:hover, .light-theme a.text-gray-300:hover { color: #5b21b6; }
         .light-theme header {
             background-color: rgba(255, 255, 255, 0.7);
@@ -640,7 +641,8 @@
                 copyBtn.classList.add('opacity-0');
                 promptOutput.textContent = "";
                 const generatedText = await callGemini(userRequest);
-                typeEffect(promptOutput, generatedText.trim(), () => {
+                const trimmedText = generatedText.trim();
+                typeEffect(promptOutput, trimmedText, () => {
                     copyBtn.classList.remove('opacity-0');
                     copyBtn.classList.add('transition-opacity', 'duration-500');
                 });
@@ -649,7 +651,7 @@
                 const items = loadHistory();
                 items.unshift({
                     userRequest,
-                    prompt: promptOutput.textContent,
+                    prompt: trimmedText,
                     framework: frameworkSelect.value,
                     tone: toneSelect.value,
                     length: lengthSelect.value,
