@@ -92,63 +92,105 @@
 
         /* --- Light Theme Overrides --- */
         .light-theme {
-            --bg-color: #ffffff;
+            --bg-color: #f9fafb; /* gray-50 */
             --text-color: #111827; /* gray-900 */
-            --text-color-secondary: #374151; /* gray-700 */
+            --text-color-secondary: #4b5563; /* gray-600 */
+            --border-color: #e5e7eb; /* gray-200 */
+            --card-bg-color: rgba(255, 255, 255, 0.9);
+            --button-bg-color: #f3f4f6; /* gray-100 */
+            --button-hover-bg-color: #e5e7eb; /* gray-200 */
+            --primary-color: #6d28d9; /* violet-700 */
+            --primary-color-hover: #5b21b6; /* violet-800 */
         }
         .light-theme body {
             background-color: var(--bg-color);
             color: var(--text-color);
         }
-        .light-theme .text-gray-200, .light-theme .text-gray-300, .light-theme .text-slate-200, .light-theme .text-slate-300, .light-theme .text-white, .light-theme .magic-title {
+        /* General Text Colors */
+        .light-theme .text-gray-200, .light-theme .text-gray-300,
+        .light-theme .text-slate-200, .light-theme .text-slate-300,
+        .light-theme .text-white, .light-theme .magic-title {
             color: var(--text-color);
         }
         .light-theme .text-slate-400, .light-theme .text-slate-500, .light-theme .text-slate-600 {
             color: var(--text-color-secondary);
         }
-        .light-theme .text-purple-200 { color: #6d28d9; }
-        .light-theme a.text-purple-400 { color: #6d28d9; }
-        .light-theme a.text-purple-400:hover, .light-theme a.text-gray-300:hover { color: #5b21b6; }
-        .light-theme header {
+        .light-theme .text-yellow-300 { color: #f59e0b; } /* amber-500 */
+        .light-theme .text-purple-200 { color: var(--primary-color); }
+        .light-theme a.text-purple-400, .light-theme .hover\:text-purple-400:hover { color: var(--primary-color); }
+        .light-theme a.text-purple-400:hover, .light-theme a.text-gray-300:hover, .light-theme .hover\:text-purple-400:hover { color: var(--primary-color-hover); }
+
+        /* Borders */
+        .light-theme .border-purple-800, .light-theme .border-purple-800\/50,
+        .light-theme .border-purple-700, .light-theme .border-slate-700,
+        .light-theme .border-slate-700\/50, .light-theme .border-slate-700\/30,
+        .light-theme .border-slate-600\/60 {
+            border-color: var(--border-color);
+        }
+
+        /* Backgrounds */
+        .light-theme header, .light-theme .bg-black\/50 {
             background-color: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
-            border-bottom-color: #e5e7eb;
         }
-        .light-theme #mobile-menu { background-color: rgba(255, 255, 255, 0.9); }
+        .light-theme #mobile-menu, .light-theme .bg-black\/70 { background-color: var(--card-bg-color); }
+
         .light-theme .magic-card {
-            background-color: rgba(249, 250, 251, 0.9);
-            border-color: #e5e7eb;
+            background-color: var(--card-bg-color);
             box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05);
             text-shadow: none;
         }
         .light-theme .magic-title { text-shadow: none; }
-        .light-theme #themeToggle {
-            background-color: #f3f4f6; color: #374151; border-color: #d1d5db;
+
+        .light-theme .bg-slate-800\/20, .light-theme .bg-slate-900\/80,
+        .light-theme .bg-black\/80 {
+            background-color: #f9fafb; /* gray-50 */
         }
-        .light-theme #themeToggle:hover { background-color: #e5e7eb; }
-        .light-theme #generateBtn { text-shadow: none; }
-        .light-theme #regenerateBtn { background-color: #ede9fe; color: #5b21b6; }
-        .light-theme #regenerateBtn:hover { background-color: #ddd6fe; }
-        .light-theme #exportMdBtn, .light-theme #exportJsonBtn, .light-theme #copyBtn {
-            background-color: #f3f4f6; color: #374151; border-color: #d1d5db;
+
+        /* Buttons & Inputs */
+        .light-theme #themeToggle, .light-theme .bg-slate-800\/60,
+        .light-theme #exportMdBtn, .light-theme #exportJsonBtn,
+        .light-theme .bg-slate-800\/70 {
+            background-color: var(--button-bg-color);
+            color: var(--text-color);
         }
-        .light-theme #exportMdBtn:hover, .light-theme #exportJsonBtn:hover, .light-theme #copyBtn:hover {
-            background-color: #e5e7eb;
+        .light-theme #themeToggle:hover, .light-theme .bg-slate-800\/60:hover,
+        .light-theme #exportMdBtn:hover, .light-theme #exportJsonBtn:hover,
+        .light-theme .bg-slate-700:hover {
+            background-color: var(--button-hover-bg-color);
         }
-        .light-theme #outputContainer div:first-of-type {
-            background-color: #f5f3ff;
-            border-color: #ddd6fe;
+
+        .light-theme #generateBtn {
+            background-image: none;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            text-shadow: none;
         }
-        .light-theme #historyList li { background-color: #f9fafb; border-color: #e5e7eb; }
-        .light-theme #historyList li .text-slate-300 { color: var(--text-color-secondary); }
-        .light-theme #historyList li .underline { color: #6d28d9; }
-        .light-theme .bg-black\/80 { border-color: #e5e7eb; }
-        .light-theme .bg-slate-900\/80 { background-color: #f9fafb; }
-        .light-theme .accordion-content .border-slate-700 { border-color: #e5e7eb; }
-        .light-theme .accordion-content .text-slate-300 { color: var(--text-color-secondary); }
+        .light-theme #generateBtn:hover {
+            background-color: var(--primary-color-hover);
+        }
+
+        .light-theme #regenerateBtn, .light-theme #copyBtn {
+            background-color: #ede9fe; /* violet-100 */
+            color: var(--primary-color);
+        }
+        .light-theme #regenerateBtn:hover, .light-theme #copyBtn:hover {
+            background-color: #ddd6fe; /* violet-200 */
+        }
+
+        .light-theme .accent-purple-500 { accent-color: var(--primary-color); }
+        .light-theme .focus\:ring-purple-400:focus { --tw-ring-color: var(--primary-color); }
+
+        /* Specific Containers */
+        .light-theme #outputContainer > div:first-of-type, .light-theme .bg-purple-900\/50 {
+            background-color: #f5f3ff; /* violet-50 */
+        }
+        .light-theme #historyList li { background-color: #fefeff; border-color: var(--border-color); }
+        .light-theme #historyList li .underline { color: var(--primary-color); }
+
         .light-theme .accordion-content .text-white { color: var(--text-color); }
         .light-theme .accordion-icon { color: #9ca3af; }
-        .light-theme .bg-slate-800\/20 { background-color: #f3f4f6; border-color: #e5e7eb; }
+
         .light-theme #bg-canvas { display: none; }
         .light-theme main { filter: none; }
     </style>
@@ -296,7 +338,7 @@
                 </section>
                 
                 <!-- History Section -->
-                <section id="historySection" class="mt-6" aria-labelledby="history-heading">
+                <section id="historySection" class="mt-6 hidden" aria-labelledby="history-heading">
                     <div class="flex items-center justify-between mb-2">
                         <h2 id="history-heading" class="text-sm font-semibold text-slate-200">History</h2>
                         <button id="clearHistoryBtn" class="text-xs text-slate-300 hover:text-white underline">Clear</button>
@@ -423,7 +465,12 @@
                 <div class="h-24 bg-slate-800/20 border border-slate-700/30 rounded-lg flex items-center justify-center">
                     <span class="text-slate-500">Banner Ad - 728x90</span>
                 </div>
-                <p class="text-xs text-slate-600 mt-4">Affiliate Disclosure: This site may contain affiliate links. If you make a purchase through these links, we may earn a commission at no extra cost to you.</p>
+                <div class="mt-6 flex justify-center space-x-6">
+                    <a href="/terms.html" class="text-sm text-slate-400 hover:text-purple-400 transition-colors">Terms of Service</a>
+                    <a href="/privacy.html" class="text-sm text-slate-400 hover:text-purple-400 transition-colors">Privacy Policy</a>
+                </div>
+                <p class="text-xs text-slate-600 mt-4">© 2025 Prompt Superior. All rights reserved.</p>
+                <p class="text-xs text-slate-600 mt-2">Affiliate Disclosure: This site may contain affiliate links. If you make a purchase through these links, we may earn a commission at no extra cost to you.</p>
             </footer>
         </main>
 
@@ -496,6 +543,14 @@
             }
             function renderHistory() {
                 const items = loadHistory();
+                const historySection = document.getElementById('historySection');
+
+                if (items.length === 0) {
+                    historySection.classList.add('hidden');
+                    return;
+                }
+
+                historySection.classList.remove('hidden');
                 historyList.innerHTML = '';
                 items.forEach((item, idx) => {
                     const li = document.createElement('li');
@@ -641,8 +696,7 @@
                 copyBtn.classList.add('opacity-0');
                 promptOutput.textContent = "";
                 const generatedText = await callGemini(userRequest);
-                const trimmedText = generatedText.trim();
-                typeEffect(promptOutput, trimmedText, () => {
+                typeEffect(promptOutput, generatedText.trim(), () => {
                     copyBtn.classList.remove('opacity-0');
                     copyBtn.classList.add('transition-opacity', 'duration-500');
                 });
@@ -651,7 +705,7 @@
                 const items = loadHistory();
                 items.unshift({
                     userRequest,
-                    prompt: trimmedText,
+                    prompt: promptOutput.textContent,
                     framework: frameworkSelect.value,
                     tone: toneSelect.value,
                     length: lengthSelect.value,
