@@ -89,6 +89,67 @@
             white-space: pre-wrap;   /* Preserves whitespace and newlines, but wraps text */
             word-wrap: break-word;   /* Breaks long words to prevent overflow */
         }
+
+        /* --- Light Theme Overrides --- */
+        .light-theme {
+            --bg-color: #ffffff;
+            --text-color: #111827; /* gray-900 */
+            --text-color-secondary: #374151; /* gray-700 */
+        }
+        .light-theme body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .light-theme .text-gray-200, .light-theme .text-gray-300, .light-theme .text-slate-200, .light-theme .text-slate-300, .light-theme .text-white, .light-theme .magic-title {
+            color: var(--text-color);
+        }
+        .light-theme .text-slate-400, .light-theme .text-slate-500, .light-theme .text-slate-600 {
+            color: var(--text-color-secondary);
+        }
+        .light-theme .text-purple-200 { color: #6d28d9; }
+        .light-theme a.text-purple-400:hover, .light-theme a.text-gray-300:hover { color: #5b21b6; }
+        .light-theme header {
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom-color: #e5e7eb;
+        }
+        .light-theme #mobile-menu { background-color: rgba(255, 255, 255, 0.9); }
+        .light-theme .magic-card {
+            background-color: rgba(249, 250, 251, 0.9);
+            border-color: #e5e7eb;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05);
+            text-shadow: none;
+        }
+        .light-theme .magic-title { text-shadow: none; }
+        .light-theme #themeToggle {
+            background-color: #f3f4f6; color: #374151; border-color: #d1d5db;
+        }
+        .light-theme #themeToggle:hover { background-color: #e5e7eb; }
+        .light-theme #generateBtn { text-shadow: none; }
+        .light-theme #regenerateBtn { background-color: #ede9fe; color: #5b21b6; }
+        .light-theme #regenerateBtn:hover { background-color: #ddd6fe; }
+        .light-theme #exportMdBtn, .light-theme #exportJsonBtn, .light-theme #copyBtn {
+            background-color: #f3f4f6; color: #374151; border-color: #d1d5db;
+        }
+        .light-theme #exportMdBtn:hover, .light-theme #exportJsonBtn:hover, .light-theme #copyBtn:hover {
+            background-color: #e5e7eb;
+        }
+        .light-theme #outputContainer div:first-of-type {
+            background-color: #f5f3ff;
+            border-color: #ddd6fe;
+        }
+        .light-theme #historyList li { background-color: #f9fafb; border-color: #e5e7eb; }
+        .light-theme #historyList li .text-slate-300 { color: var(--text-color-secondary); }
+        .light-theme #historyList li .underline { color: #6d28d9; }
+        .light-theme .bg-black\/80 { border-color: #e5e7eb; }
+        .light-theme .bg-slate-900\/80 { background-color: #f9fafb; }
+        .light-theme .accordion-content .border-slate-700 { border-color: #e5e7eb; }
+        .light-theme .accordion-content .text-slate-300 { color: var(--text-color-secondary); }
+        .light-theme .accordion-content .text-white { color: var(--text-color); }
+        .light-theme .accordion-icon { color: #9ca3af; }
+        .light-theme .bg-slate-800\/20 { background-color: #f3f4f6; border-color: #e5e7eb; }
+        .light-theme #bg-canvas { display: none; }
+        .light-theme main { filter: none; }
     </style>
     
     <!-- JSON-LD Structured Data for SEO -->
@@ -487,30 +548,28 @@
 
             // --- Theme Toggle ---
             function applyTheme(theme) {
-                const body = document.body;
                 if (theme === 'light') {
-                    body.classList.add('bg-white');
-                    body.classList.remove('text-gray-200');
-                    document.getElementById('main-card').classList.remove('magic-card');
-                    document.getElementById('main-card').classList.add('bg-white');
+                    document.documentElement.classList.add('light-theme');
                 } else {
-                    body.classList.remove('bg-white');
-                    body.classList.add('text-gray-200');
-                    document.getElementById('main-card').classList.add('magic-card');
+                    document.documentElement.classList.remove('light-theme');
                 }
             }
             function initTheme() {
-                const saved = localStorage.getItem('ps_theme') || 'dark';
-                applyTheme(saved);
-                themeToggle.textContent = saved === 'light' ? 'Use Dark' : 'Use Light';
+                const savedTheme = localStorage.getItem('ps_theme') || 'dark';
+                applyTheme(savedTheme);
+                if (themeToggle) {
+                    themeToggle.textContent = savedTheme === 'light' ? 'Use Dark' : 'Use Light';
+                }
             }
-            themeToggle.addEventListener('click', () => {
-                const current = localStorage.getItem('ps_theme') || 'dark';
-                const next = current === 'light' ? 'dark' : 'light';
-                localStorage.setItem('ps_theme', next);
-                applyTheme(next);
-                themeToggle.textContent = next === 'light' ? 'Use Dark' : 'Use Light';
-            });
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const currentTheme = document.documentElement.classList.contains('light-theme') ? 'light' : 'dark';
+                    const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+                    localStorage.setItem('ps_theme', nextTheme);
+                    applyTheme(nextTheme);
+                    themeToggle.textContent = nextTheme === 'light' ? 'Use Dark' : 'Use Light';
+                });
+            }
             initTheme();
 
             // --- Gemini API Call Function (via backend proxy) ---
