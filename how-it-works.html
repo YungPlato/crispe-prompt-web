@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>How It Works - Prompt Superior</title>
+    <meta name="description" content="A step-by-step guide on how to use the Prompt Superior generator to create powerful, structured AI prompts for any task.">
+    <meta name="author" content="Prompt Superior">
+    <meta name="robots" content="index, follow">
+
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            overflow-x: hidden;
+        }
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        main {
+            position: relative;
+            z-index: 10;
+        }
+        .content-card {
+            background-color: rgba(17, 24, 39, 0.8); /* bg-gray-900 with opacity */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(55, 65, 81, 0.5); /* border-gray-700 with opacity */
+        }
+        .step-image {
+            background-color: #1f2937;
+            border: 1px solid #4b5563;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="text-gray-200">
+
+    <!-- Header Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-20 bg-black/50 backdrop-blur-md border-b border-purple-800/50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+            <a href="/" class="text-xl font-bold text-white flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-lightbulb-fill mr-2 text-yellow-300" viewBox="0 0 16 16">
+                    <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+                <span>Prompt Superior</span>
+            </a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="/blog.html" class="text-gray-300 hover:text-purple-400 transition-colors">Blog</a>
+                <a href="/about.html" class="text-gray-300 hover:text-purple-400 transition-colors">About</a>
+                <a href="/contact.html" class="text-gray-300 hover:text-purple-400 transition-colors">Contact</a>
+                <a href="/how-it-works.html" class="text-purple-400 font-semibold transition-colors">How It Works</a>
+            </div>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black/70 backdrop-blur-md">
+            <a href="/blog.html" class="block text-gray-300 hover:text-purple-400 px-6 py-3">Blog</a>
+            <a href="/about.html" class="block text-gray-300 hover:text-purple-400 px-6 py-3">About</a>
+            <a href="/contact.html" class="block text-gray-300 hover:text-purple-400 px-6 py-3">Contact</a>
+            <a href="/how-it-works.html" class="block text-purple-400 font-semibold px-6 py-3">How It Works</a>
+        </div>
+    </header>
+
+    <!-- Matrix Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Main Content -->
+    <main class="w-full max-w-4xl mx-auto px-4 py-24 sm:py-32">
+        <div class="content-card rounded-2xl p-8 md:p-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-poppins">How It Works</h1>
+            <p class="text-slate-300 mb-10">Unlocking the power of AI is easy with Prompt Superior. Follow this simple guide to transform your ideas into perfectly crafted prompts.</p>
+
+            <div class="space-y-12">
+                <!-- Step 1 -->
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-purple-400 mb-3">Step 1: Describe Your Goal</h2>
+                        <p class="text-slate-300">Start by telling us what you want to create. In the main text box, type a simple description of your goal. Don't worry about being perfect; just get the core idea down.</p>
+                        <p class="text-slate-400 mt-2 text-sm"><strong>Example:</strong> "A funny tweet about cats who code."</p>
+                    </div>
+                    <div class="step-image h-48">
+                        <span>[Screenshot of the main input field]</span>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="step-image h-64 order-last md:order-first">
+                        <span>[Screenshot of the Framework, Tone, and Length dropdowns]</span>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-semibold text-purple-400 mb-3">Step 2: Choose Your Settings</h2>
+                        <p class="text-slate-300">Next, refine your request using the dropdown menus:</p>
+                        <ul class="list-disc list-inside mt-2 space-y-1 text-slate-300">
+                            <li><strong>Framework:</strong> Select a proven structure like C.R.I.S.P.E. for detailed prompts or AIDA for marketing copy.</li>
+                            <li><strong>Tone:</strong> Choose the voice for the AI, from Professional to Playful.</li>
+                            <li><strong>Length:</strong> Specify how long you want the final output to be.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-purple-400 mb-3">Step 3: Add a Persona (Optional)</h2>
+                        <p class="text-slate-300">This is where the magic happens. Tell the AI "who" to be by giving it a persona. This dramatically improves the quality and style of the output.</p>
+                        <p class="text-slate-400 mt-2 text-sm"><strong>Example:</strong> "A cynical senior software engineer who has seen it all."</p>
+                    </div>
+                    <div class="step-image h-48">
+                        <span>[Screenshot of the Persona input field]</span>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                     <div class="step-image h-64 order-last md:order-first">
+                        <span>[Screenshot of the generated prompt in the output box]</span>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-semibold text-purple-400 mb-3">Step 4: Generate & Copy</h2>
+                        <p class="text-slate-300">Click the "Generate Magic" button. Our tool will instantly build a detailed, structured prompt based on your inputs. You can then copy it with a single click and use it with your favorite AI model, like Gemini, ChatGPT, or Claude.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-4xl mx-auto mt-8 text-center px-4 pb-8" role="contentinfo">
+        <p class="text-xs text-slate-600 mt-4">© 2025 Prompt Superior. All rights reserved.</p>
+        <p class="text-xs text-slate-600 mt-2">Affiliate Disclosure: This site may contain affiliate links. If you make a purchase through these links, we may earn a commission at no extra cost to you.</p>
+    </footer>
+
+    <script>
+        // --- Mobile Menu Toggle ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuButton) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        });
+
+        // --- Matrix Background Logic ---
+        function initMatrix() {
+            const canvas = document.querySelector('#bg-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const alphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123.jpg';
+            const fontSize = 16;
+            const columns = canvas.width / fontSize;
+            const rainDrops = [];
+            for (let x = 0; x < columns; x++) rainDrops[x] = 1;
+
+            const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+            const draw = () => {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#0F0'; // Green text
+                ctx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < rainDrops.length; i++) {
+                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                    if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) rainDrops[i] = 0;
+                    rainDrops[i]++;
+                }
+            };
+
+            let intervalId = null;
+            function start() {
+                if (intervalId) return;
+                intervalId = setInterval(draw, 50);
+            }
+            function stop() {
+                if (!intervalId) return;
+                clearInterval(intervalId);
+                intervalId = null;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+
+            if (mediaQuery.matches) {
+                stop();
+            } else {
+                start();
+            }
+            mediaQuery.addEventListener('change', (e) => { e.matches ? stop() : start(); });
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+        initMatrix();
+    </script>
+</body>
+</html>
