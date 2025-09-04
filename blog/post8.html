@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Negative Prompts: How to Tell an AI What Not to Do - Prompt Superior</title>
+    <meta name="description" content="Learn how to use negative constraints and instructions in your prompts to gain finer control over your AI's output and avoid unwanted results.">
+    <meta name="author" content="Prompt Superior">
+    <meta name="robots" content="index, follow">
+
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            overflow-x: hidden;
+        }
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        main {
+            position: relative;
+            z-index: 10;
+        }
+        .content-card {
+            background-color: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(55, 65, 81, 0.5);
+        }
+        .prompt-box {
+            background-color: rgba(31, 41, 55, 0.5);
+            border-left: 4px solid #a78bfa; /* purple-400 */
+            padding: 1rem;
+            border-radius: 0.25rem;
+            font-family: 'monospace';
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .content-card h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(55, 65, 81, 0.5);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+    </style>
+</head>
+<body class="text-gray-200">
+
+    <!-- Header Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-20 bg-black/50 backdrop-blur-md border-b border-purple-800/50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+            <a href="/" class="text-xl font-bold text-white flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-lightbulb-fill mr-2 text-yellow-300" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5z"/></svg>
+                <span>Prompt Superior</span>
+            </a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="/blog.html" class="text-purple-400 font-semibold transition-colors">Blog</a>
+                <a href="/about.html" class="text-gray-300 hover:text-purple-400 transition-colors">About</a>
+                <a href="/contact.html" class="text-gray-300 hover:text-purple-400 transition-colors">Contact</a>
+                <a href="/how-it-works.html" class="text-gray-300 hover:text-purple-400 transition-colors">How It Works</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Matrix Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Main Content -->
+    <main class="w-full max-w-4xl mx-auto px-4 py-24 sm:py-32">
+        <div class="content-card rounded-2xl p-8 md:p-12">
+            <article class="text-slate-300 space-y-6 leading-relaxed">
+                <a href="/blog.html" class="text-purple-400 hover:underline">&larr; Back to Blog</a>
+                <h1 class="text-3xl md:text-4xl font-bold text-white mt-4 mb-2 font-poppins">Negative Prompts: How to Tell an AI What Not to Do</h1>
+                <p class="text-sm text-slate-400">Published on September 3, 2025</p>
+
+                <p>Effective communication is as much about what you *don't* say as what you do. The same principle applies when communicating with artificial intelligence. While we often focus on telling the AI what we want it to produce, it's equally powerful to tell it what to avoid. This is the concept of negative prompting—a technique for adding constraints to steer the AI away from undesirable outputs.</p>
+                <p>Using negative prompts gives you a finer degree of control, helping you eliminate clichés, avoid certain topics, or enforce a specific style. It's an essential skill for anyone looking to move from basic prompting to advanced AI interaction.</p>
+
+                <h2>Why Positive Instructions Aren't Always Enough</h2>
+                <p>You might think you can control the output with positive instructions alone. For example, instead of saying "Don't use clichés," you could say "Use original and unique language." While this is a good practice, it doesn't explicitly forbid the unwanted behavior. AI models are trained on vast amounts of text from the internet, which is rife with clichés and common phrases. Without a specific instruction to avoid them, the AI may still fall back on these common patterns.</p>
+                <p>Negative prompts act as guardrails. They create clear boundaries for the AI, forcing it to find more creative and original pathways to fulfill your request.</p>
+
+                <h2>Types of Negative Constraints You Can Use</h2>
+                <p>Negative prompting is a versatile technique that can be applied in many ways. Here are some of the most common and effective types of constraints:</p>
+
+                <h3>1. Content and Topic Avoidance</h3>
+                <p>This is the most straightforward use case. You can instruct the AI to steer clear of certain subjects or themes.</p>
+                <div class="prompt-box">"Write a short story about two friends starting a business together. Focus on their excitement and challenges, but do not mention financial investment or venture capital."</div>
+
+                <h3>2. Stylistic and Tonal Constraints</h3>
+                <p>This is perfect for refining the voice of the AI. You can forbid specific tones or stylistic elements that don't fit your needs.</p>
+                <div class="prompt-box">"Describe our new productivity app. The tone should be professional and benefit-driven. Avoid using overly casual language, slang, or emojis."</div>
+
+                <h3>3. Word and Phrase Exclusion</h3>
+                <p>If there are specific words or overused phrases you want to avoid, you can list them explicitly. This is a great way to de-jargon your content.</p>
+                <div class="prompt-box">"Explain the concept of 'synergy' in a business context. Do not use the words 'synergy,' 'leverage,' or 'paradigm shift.' Explain it using a simple analogy."</div>
+
+                <h3>4. Structural and Formatting Constraints</h3>
+                <p>You can also use negative prompts to control the format of the output, telling the AI what kind of structure to avoid.</p>
+                <div class="prompt-box">"Generate a list of five marketing ideas for a local coffee shop. Provide the ideas as a simple, numbered list. Do not include any introductory or concluding paragraphs."</div>
+
+                <h2>Putting It All Together: A Complex Example</h2>
+                <p>The true power of negative prompting comes when you combine it with strong positive instructions and a clear persona. Let's see how this works in a more complex scenario.</p>
+                <p><strong>Goal:</strong> Generate a mission statement for a new sustainable clothing brand.</p>
+                <p><strong>Initial Prompt:</strong></p>
+                <div class="prompt-box">"Write a mission statement for a sustainable clothing brand."</div>
+                <p><em>This will likely produce something generic and full of clichés like "eco-friendly," "green future," or "changing the world."</em></p>
+
+                <p><strong>Advanced Prompt with Negative Constraints:</strong></p>
+                <div class="prompt-box">"Act as a senior brand strategist. Write a powerful and concise mission statement (under 50 words) for a new sustainable clothing company.
+                <br><br>
+                <strong>Positive Instructions:</strong>
+                <br>- The tone should be confident, elegant, and slightly defiant.
+                <br>- It should appeal to style-conscious consumers who value quality and longevity.
+                <br>- Focus on the idea of 'timeless style' over 'fast fashion.'
+                <br><br>
+                <strong>Negative Constraints:</strong>
+                <br>- Do not use the words 'eco-friendly,' 'green,' or 'sustainable.'
+                <br>- Avoid industry clichés like 'changing the world' or 'making a difference.'
+                <br>- The statement should not sound like it's written for a non-profit."</div>
+                <p>This advanced prompt gives the AI a clear direction while also setting firm boundaries. The negative constraints force it to move beyond the obvious, resulting in a more unique and impactful mission statement.</p>
+
+                <p class="pt-4 border-t border-slate-700/50">Negative prompting is a subtle but powerful tool in your prompt engineering arsenal. By learning to tell the AI what not to do, you gain a new level of precision and control. It encourages the model to think more creatively and helps you produce content that is truly original and aligned with your specific vision. So, the next time you write a prompt, think not just about what you want, but also about what you want to avoid.</p>
+            </article>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-4xl mx-auto mt-8 text-center px-4 pb-8" role="contentinfo">
+        <div class="flex justify-center space-x-6">
+            <a href="/terms.html" class="text-sm text-slate-400 hover:text-purple-400 transition-colors">Terms of Service</a>
+            <a href="/privacy.html" class="text-sm text-slate-400 hover:text-purple-400 transition-colors">Privacy Policy</a>
+        </div>
+        <p class="text-xs text-slate-600 mt-4">© 2025 Prompt Superior. All rights reserved.</p>
+        <p class="text-xs text-slate-600 mt-2">Affiliate Disclosure: This site may contain affiliate links. If you make a purchase through these links, we may earn a commission at no extra cost to you.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuButton) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        });
+        function initMatrix() {
+            const canvas = document.querySelector('#bg-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            const fontSize = 16;
+            const columns = canvas.width / fontSize;
+            const rainDrops = [];
+            for (let x = 0; x < columns; x++) rainDrops[x] = 1;
+            const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+            let intervalId = null;
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#0F0';
+                ctx.font = fontSize + 'px monospace';
+                for (let i = 0; i < rainDrops.length; i++) {
+                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                    if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) rainDrops[i] = 0;
+                    rainDrops[i]++;
+                }
+            }
+            function start() {
+                if (intervalId) return;
+                intervalId = setInterval(draw, 50);
+            }
+            function stop() {
+                if (!intervalId) return;
+                clearInterval(intervalId);
+                intervalId = null;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            if (mediaQuery.matches) stop();
+            else start();
+            mediaQuery.addEventListener('change', (e) => { e.matches ? stop() : start(); });
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+        initMatrix();
+    </script>
+</body>
+</html>
