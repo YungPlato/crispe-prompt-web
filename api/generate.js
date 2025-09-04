@@ -1,6 +1,6 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method Not Allowed' });
     return;
@@ -40,22 +40,5 @@ module.exports = async (req, res) => {
   } catch (err) {
     console.error('[DEBUG] CATCH BLOCK ERROR:', err);
     res.status(500).json({ error: { message: err?.message || 'Unknown server error' } });
-  }
-};
-
-Step 3: Update package.json
-
-    Open your package.json file.
-    Delete all the text inside it and replace it with the code below. This new version is simplified and corrected to work with the new serverless function.
-
-Code for package.json:
-
-{
-  "name": "prompt-superior-proxy",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "node-fetch": "^2.7.0"
   }
 }
