@@ -14,6 +14,7 @@ module.exports = async (req, res) => {
       return;
     }
 
+    // Vercel automatically parses the body for POST requests
     const { contents, generationConfig } = req.body || {};
     if (!contents) {
       res.status(400).json({ error: { message: 'Missing contents in request body' } });
@@ -34,15 +35,11 @@ module.exports = async (req, res) => {
     const responseText = await upstream.text();
     console.log(`[DEBUG] Upstream response text snippet: ${responseText.substring(0, 500)}`);
 
+    // Set the content type for the response to the client
     res.setHeader('Content-Type', 'application/json');
 
-    if (!upstream.ok) {
-      console.error(`[DEBUG] Upstream request failed.`);
-      res.status(upstream.status).send(responseText); // Send the raw error back
-      return;
-    }
-
-    res.status(200).send(responseText); // Send the successful JSON text back
+    // Pass through the status code and the response body from the upstream API
+    res.status(upstream.status).send(responseText);
 
   } catch (err) {
     console.error('[DEBUG] CATCH BLOCK ERROR:', err);
