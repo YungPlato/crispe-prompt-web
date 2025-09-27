@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       return;
     }
 
-    const model = process.env.GOOGLE_MODEL || 'gemini-1.5-flash-latest';
+    const model = process.env.GOOGLE_MODEL || 'gemini-1.5-flash';
     const url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${googleApiKey}`;
 
     console.log(`[DEBUG] Making request to Google API.`);
