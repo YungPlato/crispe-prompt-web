@@ -6,6 +6,11 @@ export default async function handler(req, res) {
     return;
   }
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => {
+    controller.abort();
+  }, 9500); // 9.5 seconds
+
   try {
     const googleApiKey = process.env.GOOGLE_API_KEY;
     if (!googleApiKey) {
@@ -27,7 +32,8 @@ export default async function handler(req, res) {
     const upstream = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents, generationConfig })
+      body: JSON.stringify({ contents, generationConfig }),
+      signal: controller.signal
     });
 
     console.log(`[DEBUG] Upstream response status: ${upstream.status}`);
@@ -38,7 +44,14 @@ export default async function handler(req, res) {
     res.status(upstream.status).send(responseText);
 
   } catch (err) {
-    console.error('[DEBUG] CATCH BLOCK ERROR:', err);
-    res.status(500).json({ error: { message: err?.message || 'Unknown server error' } });
+    if (err.name === 'AbortError') {
+      console.error('[DEBUG] Google API request timed out.');
+      res.status(504).json({ error: { message: 'Request to upstream API timed out.' } });
+    } else {
+      console.error('[DEBUG] CATCH BLOCK ERROR:', err);
+      res.status(500).json({ error: { message: err?.message || 'Unknown server error' } });
+    }
+  } finally {
+    clearTimeout(timeout);
   }
 }
